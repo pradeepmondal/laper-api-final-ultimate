@@ -475,7 +475,7 @@ async (req, res) => {
     
       const expert = new Expert();
       expert.email =  req.body.email,
-      expert.password = user.encryptPassword(req.body.password),
+      expert.password = expert.encryptPassword(req.body.password),
       expert.isGAuth = false,
       expert.date_created = Date.now()
       console.log('new expert created, pushing to database');
@@ -485,9 +485,9 @@ async (req, res) => {
       expertDet.username = req.body.username,
       expertDet.name = req.body.name,
       expertDet.userImageUrl = "",
-      expertDet.skills = [],
+      // expertDet.skills = new Array(),
       expertDet.req = "",
-      expertDet.verified = false,
+      // expertDet.verified = false,
       expertDet.req = "",
       expertDet.lastActive = Date.now(),
       expertDet.desc = "",
