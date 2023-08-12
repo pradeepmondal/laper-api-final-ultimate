@@ -24,6 +24,11 @@ const userSchema = new Schema({
         type: String,
         
     },
+
+    req: {
+        type: String
+    },
+    
     lastActive: {
         type: Date,
 
