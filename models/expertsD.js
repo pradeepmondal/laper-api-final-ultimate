@@ -41,7 +41,7 @@ const expertsDSchema = new Schema({
 
 
     lastActive: {
-        type: Date,
+        type: String,
 
     },
     desc: {

@@ -492,7 +492,7 @@ async (req, res) => {
       expertDet.lastActive = Date.now(),
       expertDet.desc = "",
       expertDet.phoneNumber = "",
-      expertDet.userType = "user",
+      expertDet.userType = "expert",
       expertDet.versionCode = "",
       expertDet.versionName = "",
       expertDet.date_created = Date.now()
@@ -517,6 +517,78 @@ async (req, res) => {
         message: "An error has occured initially."
       })
   }
+});
+
+router.post("/user-fetch-experts", auth, async (req, res) => {
+  try {
+    const field = req.body.field;
+    const value = req.body.value;
+    const sortField = req.body.sortField;
+    const sort = req.body.sort;
+    const lim = req.body.lim;
+    let result = await ExpertD.find().sort({[sortField]: sort}).limit(lim)
+
+    if(field == "skills"){
+
+      result = await ExpertD.find({
+        [field] : { $all: value }
+      
+      }).sort({[sortField]: sort}).limit(lim)
+
+
+    }
+
+    else if(field == "name"){
+      result = await ExpertD.find({
+        [field] : { $regex: value, $options: "i" }
+      
+      }).sort({[sortField]: sort}).limit(lim)
+
+    }
+
+    else{
+
+      if(field !== "all" && value !== "all"){
+
+       result = await ExpertD.find(
+        {
+          [field]: value
+        }
+
+      ).sort({[sortField]: sort}).limit(lim)
+
+    }
+  }
+
+
+    
+
+    if (result == null){
+        console.log('Expert not found');
+        return res.status(401).json(
+            {
+                message: 'Expert not found'
+            }
+
+        )
+
+    }
+    else{
+        console.log('Expert found');
+        return res.status(200).json({
+            message: "Expert found",
+            expert: result
+          });
+        }
+
+  }
+  catch(e) {
+    console.log(e);
+    res.status(500).json({
+      message: "An error has occured."
+    })
+  }
+
 });
 
 
