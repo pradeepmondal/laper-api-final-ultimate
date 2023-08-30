@@ -67,7 +67,7 @@ const expertsDSchema = new Schema({
     },
 
     date_created : {
-        type: Date,
+        type: String,
         required: true,
         default: Date.now
 

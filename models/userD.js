@@ -30,7 +30,7 @@ const userSchema = new Schema({
     },
     
     lastActive: {
-        type: Date,
+        type: String,
 
     },
     desc: {
@@ -56,7 +56,7 @@ const userSchema = new Schema({
     },
 
     date_created : {
-        type: Date,
+        type: String,
         required: true,
         default: Date.now
 
