@@ -37,6 +37,9 @@ const expertsDSchema = new Schema({
         type: Boolean,
 
     },
+    country: {
+        type: String,
+    },
 
 
 

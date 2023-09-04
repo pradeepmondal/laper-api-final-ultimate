@@ -6,6 +6,7 @@ const User = require("../models/user")
 const UserD = require("../models/userD")
 const Expert = require("../models/experts")
 const ExpertD = require("../models/expertsD")
+const Requests = require("../models/requests")
 const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 const user = require("../models/user")
@@ -485,9 +486,10 @@ async (req, res) => {
       expertDet.username = req.body.username,
       expertDet.name = req.body.name,
       expertDet.userImageUrl = "",
-      // expertDet.skills = new Array(),
+      expertDet.skills = new Array(),
       expertDet.req = "",
-      // expertDet.verified = false,
+      expertDet.verified = false,
+      expertDet.country = "",
       expertDet.req = "",
       expertDet.lastActive = Date.now(),
       expertDet.desc = "",
@@ -590,6 +592,165 @@ router.post("/user-fetch-experts", auth, async (req, res) => {
   }
 
 });
+
+router.post("/add-request", async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  try {
+
+    
+      const request = new Requests();
+      request.accepted =  false,
+      request.clientId = req.body.clientId,
+      request.expertId = "",
+      request.problemSolved = false,
+      request.requestId = req.body.clientId + Date.now(),
+      request.problemStatement = req.body.problemStatement,
+      request.requestTime = Date.now(),
+      request.requiredTech = req.body.requiredTech
+
+      console.log('new request created, pushing to database');
+
+      const saveRes = await request.save();
+      
+          if ((!saveRes)) {
+              console.log('Some error occured')
+            res.status(500).json({
+              message: "An error has occured here."
+            })
+          } else {
+              res.status(201).json({
+                message: "Request successfully created."
+              });
+          }
+      }
+   catch(e) {
+      console.log()
+      res.status(500).json({
+        message: "Internal Server Error"
+      })
+  }
+});
+
+router.post("/fetch-requests", async (req, res) => {
+  try {
+    const field = req.body.field;
+    const value = req.body.value;
+    const sortField = req.body.sortField;
+    const sort = req.body.sort;
+    const lim = req.body.lim;
+    let result = await Requests.find().sort({[sortField]: sort}).limit(lim)
+
+    if(field == "requiredTech"){
+
+      result = await Requests.find({
+        [field ]:  value
+      
+      }).sort({[sortField]: sort}).limit(lim)
+      console.log(result);
+
+
+    }
+
+    else if(field == "problemStatement"){
+      result = await Requests.find({
+        [field] : { $regex: value, $options: "i" }
+      
+      }).sort({[sortField]: sort}).limit(lim)
+
+    }
+
+    else{
+
+      if(field !== "all" && value !== "all"){
+
+       result = await Requests.find(
+        {
+          [field]: value
+        }
+
+      ).sort({[sortField]: sort}).limit(lim)
+
+    }
+  }
+
+
+    
+
+    if (result == null){
+        console.log('Request not found');
+        return res.status(401).json(
+            {
+                message: 'request not found'
+            }
+
+        )
+
+    }
+    else{
+        console.log('Request found');
+        return res.status(200).json({
+            message: "Request found",
+            request: result
+          });
+        }
+
+  }
+  catch(e) {
+    console.log(e);
+    res.status(500).json({
+      message: "Internal Server Error"
+    })
+  }
+
+});
+
+router.put("/update-request", async (req, res) => {
+  const field = req.body.field;
+  try {
+    const result = await Requests.findOneAndUpdate({
+        requestId: req.body.requestId
+
+    },
+    {
+      $set: {
+        [field]: req.body.value
+      }
+    },
+    {
+      new: true
+    })
+
+    if (result == null){
+        console.log('Request not found');
+        return res.status(401).json(
+            {
+                message: 'Request not found'
+            }
+
+        )
+
+    }
+    else{
+        console.log('Request found');
+        return res.status(200).json({
+            message: "Request updated successfully",
+          });
+        }
+
+  }
+  catch(e) {
+    console.log(e);
+    res.status(500).json({
+      message: "Internal Server Error"
+    })
+  }
+
+
+})
 
 
 
