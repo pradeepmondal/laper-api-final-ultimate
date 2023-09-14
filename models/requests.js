@@ -26,6 +26,10 @@ const requestsSchema = new Schema({
         type: Boolean,
     },
 
+    status: {
+        type: String,
+    },
+
     problemStatement: {
         type: String,
     },

@@ -121,6 +121,7 @@ router.post("/login", async (req, res) => {
         console.log('new user created, pushing to database');
 
         const userDet = new UserD();
+        userDet.userId =  req.body.email,
         userDet.email =  req.body.email,
         userDet.username = req.body.username,
         userDet.name = req.body.name,
@@ -204,6 +205,7 @@ router.post("/user-add",  body('email').isEmail(),
 
     try {
         const userDet = new UserD();
+        userDet.userId =  req.body.email,
         userDet.email =  req.body.email,
         userDet.username = req.body.username,
         userDet.name = req.body.name,
@@ -293,6 +295,7 @@ router.post("/expert-add",  body('email').isEmail(),
 
     try {
         const expertDet = new ExpertD();
+        expertDet.expertId =  req.body.email,
         expertDet.email =  req.body.email,
         expertDet.username = req.body.username,
         expertDet.name = req.body.name,
@@ -482,6 +485,7 @@ async (req, res) => {
       console.log('new expert created, pushing to database');
 
       const expertDet = new ExpertD();
+      expertDet.expertId =  req.body.email,
       expertDet.email =  req.body.email,
       expertDet.username = req.body.username,
       expertDet.name = req.body.name,
@@ -603,6 +607,7 @@ router.post("/add-request", async (req, res) => {
 
     
       const request = new Requests();
+      request.status = "active",
       request.accepted =  false,
       request.clientId = req.body.clientId,
       request.expertId = "",
@@ -684,7 +689,8 @@ router.post("/fetch-requests", async (req, res) => {
         console.log('Request not found');
         return res.status(401).json(
             {
-                message: 'request not found'
+                message: 'request not found',
+                found: "false"
             }
 
         )
@@ -694,6 +700,7 @@ router.post("/fetch-requests", async (req, res) => {
         console.log('Request found');
         return res.status(200).json({
             message: "Request found",
+            found: "true",
             request: result
           });
         }
@@ -702,7 +709,8 @@ router.post("/fetch-requests", async (req, res) => {
   catch(e) {
     console.log(e);
     res.status(500).json({
-      message: "Internal Server Error"
+      message: "Internal Server Error",
+      found: "false"
     })
   }
 

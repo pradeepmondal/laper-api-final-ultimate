@@ -4,6 +4,11 @@ const bcrypt = require('bcrypt');
 
 
 const expertsDSchema = new Schema({
+    expertId: {
+        type: String,
+        required: true
+
+    },
     email: { 
         type: String,
         required: true 
