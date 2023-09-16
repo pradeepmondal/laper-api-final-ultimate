@@ -597,7 +597,7 @@ router.post("/user-fetch-experts", auth, async (req, res) => {
 
 });
 
-router.post("/add-request", async (req, res) => {
+router.post("/add-request", auth,  async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -609,7 +609,7 @@ router.post("/add-request", async (req, res) => {
       const request = new Requests();
       request.status = "active",
       request.accepted =  false,
-      request.clientId = req.body.clientId,
+      request.clientId = req.decoded.email,
       request.expertId = "",
       request.problemSolved = false,
       request.requestId = req.body.clientId + Date.now(),
