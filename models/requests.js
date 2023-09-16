@@ -42,6 +42,9 @@ const requestsSchema = new Schema({
     requiredTech: {
         type: Array,
 
+    },
+    imgUrl: {
+        type: Array
     }
 
 });

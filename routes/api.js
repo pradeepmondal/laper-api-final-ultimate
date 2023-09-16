@@ -615,7 +615,8 @@ router.post("/add-request", auth,  async (req, res) => {
       request.requestId = req.decoded.email + Date.now(),
       request.problemStatement = req.body.problemStatement,
       request.requestTime = Date.now(),
-      request.requiredTech = req.body.requiredTech
+      request.requiredTech = req.body.requiredTech,
+      request.imgUrl = req.body.imgUrl
 
       console.log('new request created, pushing to database');
 
