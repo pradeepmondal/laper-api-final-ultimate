@@ -44,7 +44,8 @@ const requestsSchema = new Schema({
 
     },
     imgUrl: {
-        type: Array
+        type: Array,
+        default: ""
     }
 
 });
