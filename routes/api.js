@@ -74,7 +74,7 @@ router.post("/login", async (req, res) => {
                 },
                 process.env.AUTH_SECRET,
                 {
-                    expiresIn: '48h'
+                    // expiresIn: '48h'
                 }
 
             );
