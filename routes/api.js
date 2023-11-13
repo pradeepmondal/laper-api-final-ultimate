@@ -761,10 +761,66 @@ router.put("/update-request", async (req, res) => {
 
 })
 
+router.post("/expert-fetch-users", auth, async (req, res) => {
+  try {
+    const field = req.body.field;
+    const value = req.body.value;
+    const sortField = req.body.sortField;
+    const sort = req.body.sort;
+    const lim = req.body.lim;
+    let result = await UserD.find().sort({[sortField]: sort}).limit(lim)
+
+    if(field == "name"){
+      result = await UserD.find({
+        [field] : { $regex: value, $options: "i" }
+      
+      }).sort({[sortField]: sort}).limit(lim)
+
+    }
+
+    else{
+
+      if(field !== "all" && value !== "all"){
+
+       result = await UserD.find(
+        {
+          [field]: value
+        }
+
+      ).sort({[sortField]: sort}).limit(lim)
+
+    }
+  }
 
 
+    
 
+    if (result == null){
+        console.log('User not found');
+        return res.status(401).json(
+            {
+                message: 'User not found'
+            }
 
+        )
 
+    }
+    else{
+        console.log('User found');
+        return res.status(200).json({
+            message: "User found",
+            expert: result
+          });
+        }
 
-  module.exports = router
+  }
+  catch(e) {
+    console.log(e);
+    res.status(500).json({
+      message: "An error has occured."
+    })
+  }
+
+});
+
+module.exports = router
