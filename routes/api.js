@@ -809,7 +809,7 @@ router.post("/expert-fetch-users", auth, async (req, res) => {
         console.log('User found');
         return res.status(200).json({
             message: "User found",
-            expert: result
+            user: result
           });
         }
 
