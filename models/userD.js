@@ -34,6 +34,10 @@ const userSchema = new Schema({
         type: String
     },
     
+    avl_experts: {
+        type: Object
+    },
+    
     lastActive: {
         type: String,
 

@@ -38,6 +38,10 @@ const expertsDSchema = new Schema({
         type: String
     },
 
+    avl_users: {
+        type: Object
+    },
+
     verified: {
         type: Boolean,
 

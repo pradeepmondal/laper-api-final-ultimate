@@ -733,6 +733,69 @@ router.put("/update-request", auth, async (req, res) => {
       new: true
     })
 
+    // updating avl_experts and avl_users in case status is updated to "accepted"
+
+    c_id = result.clientId;
+    r_id = req.body.requestId;
+    e_id = req.decoded.email;
+
+    if(field === 'status'){
+      if(value === 'accepted'){
+
+        //updating expert's avl_users
+
+        try {
+          const expUpdate = await ExpertD.findOneAndUpdate({
+              email: req.decoded.email
+          },
+          {
+            $set: {
+              'avl_users': {c_id : {r_id} }
+            }
+          },
+          {
+            new: true
+          })
+        }
+        
+        //catching error in case updation of avl_users
+
+        catch(e) {
+          console.log(e);
+          res.status(500).json({
+            message: "Error occurred when updating available users in experts"
+          })
+        }
+
+        //updating user's avl_experts
+
+        try {
+          const userUpdate = await UserD.findOneAndUpdate({
+              email: c_id
+          },
+          {
+            $set: {
+              'avl_experts': {e_id : {r_id} }
+            }
+          },
+          {
+            new: true
+          })
+        }
+        //catching error in case updation of avl_experts
+
+        catch(e) {
+          console.log(e);
+          res.status(500).json({
+            message: "Error occurred when updating available experts in users"
+          })
+        }
+        
+      }
+    }
+
+    //if request is not found
+
     if (result == null){
         console.log('Request not found');
         return res.status(401).json(
@@ -744,13 +807,16 @@ router.put("/update-request", auth, async (req, res) => {
 
     }
     else{
-        console.log('Request found');
+        console.log('Request found and updated');
         return res.status(200).json({
             message: "Request updated successfully",
           });
         }
 
   }
+
+  //catching error in case for the whole updation of request
+
   catch(e) {
     console.log(e);
     res.status(500).json({
