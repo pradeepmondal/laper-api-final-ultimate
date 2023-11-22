@@ -39,7 +39,8 @@ const expertsDSchema = new Schema({
     },
 
     avl_users: {
-        type: Object
+        type: Object,
+        default: {}
     },
 
     verified: {

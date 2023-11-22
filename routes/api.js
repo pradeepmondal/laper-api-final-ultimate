@@ -719,6 +719,7 @@ router.post("/fetch-requests", async (req, res) => {
 
 router.put("/update-request", auth, async (req, res) => {
   const field = req.body.field;
+  const value = req.body.value;
   try {
     const result = await Requests.findOneAndUpdate({
         requestId: req.body.requestId
