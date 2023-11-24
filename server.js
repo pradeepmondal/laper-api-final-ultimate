@@ -14,38 +14,40 @@ db.once('open', () => console.log('Database connected'))
 
 app.use(express.json())
 
-const api = require('./routes/api')
+const users_api = require('./routes/api/users')
+const experts_api = require('./routes/api/experts')
+const requests_api = require('./routes/api/requests')
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope:
-      [ 'email', 'profile' ] }
-));
+// app.get('/auth/google',
+//   passport.authenticate('google', { scope:
+//       [ 'email', 'profile' ] }
+// ));
 
-app.get( '/auth/google/callback',
-    passport.authenticate( 'google', {
-        //successRedirect: '/auth/google/success',
-        failureRedirect: '/auth/google/failure',
-        session: false
-}), (req, res) => {
-    console.log('success');
-    console.log('Logged In');
-            const token = jwt.sign(
-                {
-                    email: req.user.email,
+// app.get( '/auth/google/callback',
+//     passport.authenticate( 'google', {
+//         //successRedirect: '/auth/google/success',
+//         failureRedirect: '/auth/google/failure',
+//         session: false
+// }), (req, res) => {
+//     console.log('success');
+//     console.log('Logged In');
+//             const token = jwt.sign(
+//                 {
+//                     email: req.user.email,
 
-                },
-                process.env.AUTH_SECRET,
-                {
-                    expiresIn: '48h'
-                }
+//                 },
+//                 process.env.AUTH_SECRET,
+//                 {
+//                     expiresIn: '48h'
+//                 }
 
-            );
+//             );
 
-            return res.status(200).json({
-                message: "Auth successful",
-                token: token
-              });
-});
+//             return res.status(200).json({
+//                 message: "Auth successful",
+//                 token: token
+//               });
+// });
 
 // app.get('/auth/google/success', (req, res) => {
 //   console.log('success');
@@ -64,7 +66,10 @@ app.get('/auth/google/failure', (req, res) => {
 });
 
 
-app.use('/api', api)
+app.use('/api/users', users_api)
+app.use('/api/experts', experts_api)
+app.use('/api/requests', requests_api)
+
 
 
 app.listen(3000, () => console.log('server started'))

@@ -95,4 +95,4 @@ expertsDSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
   };
 
-module.exports = mongoose.model("ExpertDet", expertsDSchema);
+module.exports = mongoose.model("ExpertDetails", expertsDSchema);

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
-// const auth = require("../middleware/auth")
+const auth = require("../middleware/auth")
 const User = require("../models/user")
 const UserD = require("../models/userD")
 const Expert = require("../models/experts")
@@ -12,27 +12,6 @@ const { body, validationResult } = require('express-validator');
 const user = require("../models/user")
 require('../auths/auth')
 
-
-function auth (req, res, next) {
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
-  
-  if (token) {
-      jwt.verify(token, process.env.AUTH_SECRET, (err, decoded) => {
-          if (err) {
-              return res.json({
-                  message: 'Token is invalid'
-              });
-          } else {
-              req.decoded = decoded;
-              next();
-          }
-      });
-  } else {
-      return res.json({
-          message: 'Please provide auth token'
-      });
-  }
-};
 
 router.get("/", async (req, res) => {
     res.status(201).json({
@@ -450,12 +429,6 @@ router.post("/expert-login", async (req, res) => {
             });
           }
       }
-
-  
-
-
-  
-  
   catch(err){
     console.log(err);
     res.status(500).json({
