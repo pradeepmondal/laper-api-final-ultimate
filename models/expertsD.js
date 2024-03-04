@@ -70,6 +70,10 @@ const expertsDSchema = new Schema({
         type: String,
         required: true
     },
+    
+    categories: {
+        type: Array
+    }, 
 
     versionCode: {
         type: Number
